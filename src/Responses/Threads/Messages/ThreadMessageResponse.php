@@ -38,7 +38,7 @@ final class ThreadMessageResponse implements ResponseContract, ResponseHasMetaIn
         public array $content,
         public ?string $assistantId,
         public ?string $runId,
-        public array $attachments,
+        public ?array $attachments,
         public array $metadata,
         private readonly MetaInformation $meta,
     ) {}
@@ -59,10 +59,10 @@ final class ThreadMessageResponse implements ResponseContract, ResponseHasMetaIn
             $attributes['content'],
         );
 
-        $attachments = array_map(
+        $attachments = isset($attributes['attachments']) ? array_map(
             fn (array $attachment): ThreadMessageResponseAttachment => ThreadMessageResponseAttachment::from($attachment),
             $attributes['attachments']
-        );
+        ) : null;
 
         return new self(
             $attributes['id'],
